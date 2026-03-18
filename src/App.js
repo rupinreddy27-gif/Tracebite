@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Sidebar";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Batches from "./pages/Batches";
 import NewBatch from "./pages/NewBatch";
@@ -8,19 +9,24 @@ import SearchTrace from "./pages/SearchTrace";
 import QATemplates from "./pages/QATemplates";
 import Admin from "./pages/Admin";
 
+function PrivateRoute({ children }) {
+  const user = localStorage.getItem("loggedInUser");
+  return user ? children : <Navigate to="/login" />;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/batches" element={<Batches />} />
-        <Route path="/batches/new" element={<NewBatch />} />
-        <Route path="/batches/:id" element={<BatchDetail />} />
-        <Route path="/search" element={<SearchTrace />} />
-        <Route path="/qa-templates" element={<QATemplates />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/dashboard" element={<PrivateRoute><Navbar /><Dashboard /></PrivateRoute>} />
+        <Route path="/batches" element={<PrivateRoute><Navbar /><Batches /></PrivateRoute>} />
+        <Route path="/batches/new" element={<PrivateRoute><Navbar /><NewBatch /></PrivateRoute>} />
+        <Route path="/batches/:id" element={<PrivateRoute><Navbar /><BatchDetail /></PrivateRoute>} />
+        <Route path="/search" element={<PrivateRoute><Navbar /><SearchTrace /></PrivateRoute>} />
+        <Route path="/qa-templates" element={<PrivateRoute><Navbar /><QATemplates /></PrivateRoute>} />
+        <Route path="/admin" element={<PrivateRoute><Navbar /><Admin /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   );

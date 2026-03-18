@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { batches } from "../data/mockData";
+import { batches, ingredients } from "../data/mockData";
 
 export default function Batches() {
   const navigate = useNavigate();
@@ -17,9 +17,12 @@ export default function Batches() {
     return matchSearch && matchFilter;
   });
 
+  const isOnHold = (batch) =>
+    ingredients.some((i) => i.status === "Under Review") && batch.status === "Released";
+
   return (
     <div style={{ minHeight: "100vh", background: "#f8fafc", padding: "24px", fontFamily: "Arial, sans-serif" }}>
-      
+
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
         <div>
@@ -59,25 +62,26 @@ export default function Batches() {
             key={batch.id}
             onClick={() => navigate(`/batches/${batch.id}`)}
             style={{ background: "white", borderRadius: "16px", padding: "20px", cursor: "pointer", border: "1px solid #f1f5f9" }}>
-            
+
             <div style={{ color: "#64748b", fontSize: "12px", marginBottom: "6px" }}>{batch.id}</div>
             <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "4px" }}>{batch.product}</div>
             <div style={{ color: "#64748b", fontSize: "14px", marginBottom: "16px" }}>SKU: {batch.sku}</div>
-            
+
             <div style={{ color: "#475569", fontSize: "14px", marginBottom: "4px" }}>🏭 {batch.factory}</div>
             <div style={{ color: "#475569", fontSize: "14px", marginBottom: "4px" }}>📅 {batch.date}</div>
             <div style={{ color: "#475569", fontSize: "14px", marginBottom: "16px" }}>📦 {batch.quantity} {batch.unit}</div>
-            
+
             <div style={{
               display: "inline-block",
               padding: "4px 12px",
               borderRadius: "999px",
               fontSize: "13px",
-              background: batch.status === "Released" ? "#dcfce7" : batch.status === "QA Rejected" ? "#fee2e2" : "#fef9c3",
-              color: batch.status === "Released" ? "#16a34a" : batch.status === "QA Rejected" ? "#dc2626" : "#ca8a04"
+              background: isOnHold(batch) ? "#fef9c3" : batch.status === "Released" ? "#dcfce7" : batch.status === "QA Rejected" ? "#fee2e2" : "#fef9c3",
+              color: isOnHold(batch) ? "#ca8a04" : batch.status === "Released" ? "#16a34a" : batch.status === "QA Rejected" ? "#dc2626" : "#ca8a04"
             }}>
-              {batch.status}
+              {isOnHold(batch) ? "🔒 On Hold" : batch.status}
             </div>
+
           </div>
         ))}
       </div>

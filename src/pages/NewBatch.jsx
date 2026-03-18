@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { qaTemplates } from "../data/mockData";
 
 export default function NewBatch() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function NewBatch() {
     targetQty: "",
     actualQty: "",
     notes: "",
+    templateId: "",
   });
 
   const handleChange = (e) => {
@@ -24,13 +26,18 @@ export default function NewBatch() {
       alert("Please fill in Product, SKU and Factory at minimum");
       return;
     }
-    alert(`Batch created for ${form.product}! (In real app this saves to database)`);
+    if (!form.templateId) {
+      alert("Please select a QA Template for this batch");
+      return;
+    }
+    alert(`Batch created for ${form.product} with QA template selected! (Saves to database when backend is connected)`);
     navigate("/batches");
   };
 
+  const selectedTemplate = qaTemplates.find((t) => t.id === form.templateId);
+
   return (
     <div style={{ minHeight: "100vh", background: "#f8fafc", padding: "24px", fontFamily: "Arial, sans-serif" }}>
-
       <div style={{ maxWidth: "700px", margin: "0 auto" }}>
 
         {/* Header */}
@@ -46,13 +53,10 @@ export default function NewBatch() {
           </div>
         </div>
 
-        {/* Form */}
-        <div style={{ background: "white", borderRadius: "16px", padding: "24px" }}>
-          <h2 style={{ margin: "0 0 20px 0", display: "flex", alignItems: "center", gap: "8px" }}>
-            📦 Batch Information
-          </h2>
+        {/* Batch Info Form */}
+        <div style={{ background: "white", borderRadius: "16px", padding: "24px", marginBottom: "16px" }}>
+          <h2 style={{ margin: "0 0 20px 0" }}>📦 Batch Information</h2>
 
-          {/* Row 1 */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
             <div>
               <label style={{ fontSize: "14px", color: "#475569", display: "block", marginBottom: "6px" }}>Product Name *</label>
@@ -76,7 +80,6 @@ export default function NewBatch() {
             </div>
           </div>
 
-          {/* Row 2 */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
             <div>
               <label style={{ fontSize: "14px", color: "#475569", display: "block", marginBottom: "6px" }}>Factory Name *</label>
@@ -103,7 +106,6 @@ export default function NewBatch() {
             </div>
           </div>
 
-          {/* Row 3 */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
             <div>
               <label style={{ fontSize: "14px", color: "#475569", display: "block", marginBottom: "6px" }}>Production Date *</label>
@@ -130,7 +132,6 @@ export default function NewBatch() {
             </div>
           </div>
 
-          {/* Row 4 */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
             <div>
               <label style={{ fontSize: "14px", color: "#475569", display: "block", marginBottom: "6px" }}>Target Quantity</label>
@@ -156,8 +157,7 @@ export default function NewBatch() {
             </div>
           </div>
 
-          {/* Notes */}
-          <div style={{ marginBottom: "24px" }}>
+          <div>
             <label style={{ fontSize: "14px", color: "#475569", display: "block", marginBottom: "6px" }}>Notes</label>
             <textarea
               name="notes"
@@ -168,14 +168,55 @@ export default function NewBatch() {
               style={{ width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid #e2e8f0", fontSize: "14px", boxSizing: "border-box", resize: "vertical" }}
             />
           </div>
-
-          {/* Submit */}
-          <button
-            onClick={handleSubmit}
-            style={{ width: "100%", padding: "16px", background: "#2563eb", color: "white", border: "none", borderRadius: "12px", cursor: "pointer", fontWeight: "bold", fontSize: "16px" }}>
-            Create Batch Record
-          </button>
         </div>
+
+        {/* QA Template Selector */}
+        <div style={{ background: "white", borderRadius: "16px", padding: "24px", marginBottom: "16px" }}>
+          <h2 style={{ margin: "0 0 8px 0" }}>📋 Select QA Template *</h2>
+          <p style={{ color: "#64748b", fontSize: "14px", margin: "0 0 16px 0" }}>
+            Choose a QA checklist template for this batch. These checks will be loaded automatically.
+          </p>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+            {qaTemplates.map((template) => (
+              <div
+                key={template.id}
+                onClick={() => setForm({ ...form, templateId: template.id })}
+                style={{
+                  padding: "16px",
+                  borderRadius: "12px",
+                  border: `2px solid ${form.templateId === template.id ? "#2563eb" : "#e2e8f0"}`,
+                  cursor: "pointer",
+                  background: form.templateId === template.id ? "#eff6ff" : "white",
+                }}>
+                <div style={{ fontWeight: "bold", marginBottom: "4px" }}>{template.name}</div>
+                <div style={{ color: "#64748b", fontSize: "13px", marginBottom: "8px" }}>{template.category}</div>
+                <div style={{ color: "#94a3b8", fontSize: "13px" }}>{template.items.length} check items</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Preview selected template */}
+          {selectedTemplate && (
+            <div style={{ marginTop: "16px", background: "#f8fafc", borderRadius: "12px", padding: "16px" }}>
+              <div style={{ fontWeight: "bold", fontSize: "14px", marginBottom: "10px", color: "#2563eb" }}>
+                ✅ {selectedTemplate.name} — checks that will be loaded:
+              </div>
+              {selectedTemplate.items.map((item, index) => (
+                <div key={item} style={{ fontSize: "14px", padding: "6px 0", borderBottom: "1px solid #e2e8f0", color: "#475569" }}>
+                  {index + 1}. {item}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Submit */}
+        <button
+          onClick={handleSubmit}
+          style={{ width: "100%", padding: "16px", background: "#2563eb", color: "white", border: "none", borderRadius: "12px", cursor: "pointer", fontWeight: "bold", fontSize: "16px" }}>
+          Create Batch Record
+        </button>
 
       </div>
     </div>

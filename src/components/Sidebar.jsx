@@ -14,7 +14,7 @@ export default function Navbar() {
 
   return (
     <div style={{ background: "white", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #e2e8f0", fontFamily: "Arial, sans-serif" }}>
-      
+
       {/* Logo */}
       <div style={{ fontWeight: "bold", fontSize: "20px", color: "#2563eb", cursor: "pointer" }} onClick={() => navigate("/dashboard")}>
         TraceBite
@@ -41,9 +41,16 @@ export default function Navbar() {
         ))}
       </div>
 
-      {/* User Info */}
-      <div style={{ background: "#f1f5f9", padding: "8px 16px", borderRadius: "10px", fontSize: "14px", color: "#334155", fontWeight: "500" }}>
-        👤 QA Manager
+      {/* User Info + Logout */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <div style={{ background: "#f1f5f9", padding: "8px 16px", borderRadius: "10px", fontSize: "14px", color: "#334155", fontWeight: "500" }}>
+          👤 {JSON.parse(localStorage.getItem("loggedInUser") || '{}').name || "User"}
+        </div>
+        <button
+          onClick={() => { localStorage.removeItem("loggedInUser"); window.location.href = "/login"; }}
+          style={{ padding: "8px 16px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500" }}>
+          Logout
+        </button>
       </div>
 
     </div>
