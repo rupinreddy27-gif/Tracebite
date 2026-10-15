@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# TraceBite
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A food production traceability web app that tracks each batch from raw materials through cooking to dispatch, so any batch can be traced back to its source.
 
-## Available Scripts
+Built with React by Rupin Reddy (@rupinreddy27-gif) and @peram-vignesh.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Role-based dashboards** for four roles: General Manager, Raw Material Manager, Cook Manager, and Dispatch Manager
+- **Batch tracking:** create batches, view batch details, and follow each batch's status
+- **Trace search:** look up a batch and see its full history
+- **Raw material approvals:** approve or reject incoming raw materials
+- **QA templates:** reusable quality-check templates for batches
+- **Admin panel** and protected routes behind a login
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tech stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- React 19, React Router 7
+- Lucide icons
+- Mock data layer (`src/data/mockData.js`) in place of a backend for now
 
-### `npm test`
+## Project structure
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+src/
+  components/   Sidebar, Topbar, BatchCard, StatCard, StatusBadge
+  pages/        Dashboards, Batches, NewBatch, BatchDetail, SearchTrace, QATemplates, Admin, Login
+  data/         Mock data
+```
 
-### `npm run build`
+## Run locally
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Then open http://localhost:3000.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Roadmap
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Connect to a real database and API
+- Deploy a live demo
+- Add screenshots to this README
