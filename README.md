@@ -28,14 +28,6 @@ src/
   data/         Mock data
 ```
 
-## Run locally
-
-```bash
-npm install
-npm start
-```
-
-Then open http://localhost:3000.
 
 ## Roadmap
 
